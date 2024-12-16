@@ -1,0 +1,51 @@
+/* Grid container styling */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Defines 3 equal columns */
+    gap: 16px; /* Adds spacing between grid items */
+    padding: 20px; /* Adds padding inside the container */
+    padding-top: 75px;
+    justify-content: center; /* Centers the entire grid */
+  }
+  
+  /* Grid item styling */
+  .grid-item {
+    position: relative; /* Allows text box to be positioned on top of the image */
+    overflow: hidden;
+    border-radius: 8px; /* Optional rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds shadow */
+  }
+  
+  /* Image styling */
+  .grid-item img {
+    width: 100%; /* Fill the grid item's width */
+    height: 150px; /* Fixed height */
+    object-fit: cover; /* Ensures the image fits and crops properly */
+    display: block; /* Ensures no extra space below the image */
+  }
+  
+  /* Destination name overlay styling */
+  .grid-item h3 {
+    position: absolute; /* Position the text box on top of the image */
+    bottom: 0; /* Align to the bottom of the grid item */
+    left: 0; /* Align to the left of the grid item */
+    width: 100%; /* Span the entire width of the grid item */
+    margin: 0; /* Remove default margins */
+    padding: 5px; /* Add padding inside the text box */
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+    color: #fff; /* White text for contrast */
+    font-size: 16px;
+    text-align: center;
+    border-radius: 0 0 8px 8px; /* Match the grid-item's rounded corners at the bottom */
+  }
+
+  /* home.component.css */
+.grid-item {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.grid-item:hover {
+  transform: scale(1.02);
+}
+  

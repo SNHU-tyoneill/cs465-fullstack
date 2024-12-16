@@ -1,0 +1,88 @@
+<!-- admin.component.html -->
+<div class="admin-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">
+        <img src="/assets/images/logo.png" alt="">
+      </div>
+      
+      <nav class="nav-links">
+        <a href="/travel-trips" class="nav-link">Travel</a>
+        <a href="/admin/reservations" class="nav-link">Reservations</a>
+        <a href="/admin/users" class="nav-link">Users</a>
+        <a href="/admin/settings" class="nav-link">Settings</a>
+      </nav>
+    </div>
+  
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Header Icons -->
+      <div class="header-icons">
+        <a href="#" class="icon">❔</a>
+        <a href="#" class="icon">💬</a>
+        <a href="#" class="icon">✉️</a>
+        <a href="#" class="icon">👤</a>
+      </div>
+  
+      <!-- Form Content -->
+      <div class="form-container">
+        <form (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label>Group Name</label>
+            <div class="input-spacer"></div>
+          </div>
+  
+          <div class="form-group">
+            <label>ID:</label>
+            <input type="text" [(ngModel)]="groupData.id" name="id">
+          </div>
+  
+          <div class="form-group">
+            <label>Destination:</label>
+            <input type="text" [(ngModel)]="groupData.destination" name="destination">
+          </div>
+  
+          <div class="form-group">
+            <label>Length of Stay:</label>
+            <div class="stay-duration">
+              <div class="number-input">
+                <input type="number" [(ngModel)]="groupData.nights" name="nights" min="1">
+                <div class="arrows">
+                  <button type="button" class="arrow up">▲</button>
+                  <button type="button" class="arrow down">▼</button>
+                </div>
+              </div>
+              <span>Nights</span>
+              
+              <div class="number-input">
+                <input type="number" [(ngModel)]="groupData.days" name="days" min="1">
+                <div class="arrows">
+                  <button type="button" class="arrow up">▲</button>
+                  <button type="button" class="arrow down">▼</button>
+                </div>
+              </div>
+              <span>Days</span>
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label>Start Date:</label>
+            <div class="date-input">
+              <input type="text" [(ngModel)]="groupData.startDate" name="startDate" placeholder="/ / ">
+              <button type="button" class="calendar-button">📅</button>
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label>Resort:</label>
+            <input type="text" [(ngModel)]="groupData.resort" name="resort">
+          </div>
+  
+          <div class="form-group">
+            <label>Per Person:</label>
+            <input type="text" [(ngModel)]="groupData.perPerson" name="perPerson">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
