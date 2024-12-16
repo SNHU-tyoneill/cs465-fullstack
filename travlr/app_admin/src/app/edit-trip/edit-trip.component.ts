@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { TripDataService } from '../services/trip-data.service';
+import { AuthenticationService } from '../services/authentication.service';
 import { Trip } from '../models/trip';
 
 @Component({
@@ -14,7 +15,6 @@ import { Trip } from '../models/trip';
 })
 
 export class EditTripComponent implements OnInit {
-
   public editForm!: FormGroup;
   trip!: Trip;
   submitted = false;
@@ -23,12 +23,18 @@ export class EditTripComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private tripDataService: TripDataService
+    private tripDataService: TripDataService,
+    private authService: AuthenticationService  // Add this
   ) {}
   
   ngOnInit(): void {
-    
-    // Retrieve stashed trip ID
+    // First check if user is logged in
+    if (!this.authService.isLoggedIn()) {
+      console.log('User not logged in, redirecting to login');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     let tripCode = localStorage.getItem("tripCode");
     if (!tripCode) {
       alert("Something wrong, couldn't find where I stashed tripCode!");
@@ -65,26 +71,46 @@ export class EditTripComponent implements OnInit {
           console.log(this.message);
         },
         error:(error: any) => {
-          console.log('Error: ' +  error);
+          console.log('Error retrieving trip:', error);
+          if (error.status === 401) {
+            console.log('Auth error - redirecting to login');
+            this.authService.logout();
+            this.router.navigate(['/login']);
+          }
         }
       })
   }
 
   public onSubmit() {
+    if (!this.authService.isLoggedIn()) {
+      console.log('User not logged in, redirecting to login');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.submitted = true;
     if(this.editForm.valid) {
+      console.log('Submitting updated trip data:', this.editForm.value);
       this.tripDataService.updateTrip(this.editForm.value)
         .subscribe({
           next: (value: any) => {
-            console.log(value);
-            this.router.navigate(['']);
+            console.log('Trip updated successfully:', value);
+            this.router.navigate(['/travel-trips']);
           },
           error: (error: any) => {
-            console.log('Error: ' + error);
+            console.error('Error updating trip:', error);
+            if (error.status === 401) {
+              console.log('Auth error - redirecting to login');
+              this.authService.logout();
+              this.router.navigate(['/login']);
+            }
           }
-        })
+        });
+    } else {
+      console.log('Form validation errors:', this.editForm.errors);
     }
   }
+
   // get the form short name to access the form fields
   get f() { return this.editForm.controls; }
-}
+};

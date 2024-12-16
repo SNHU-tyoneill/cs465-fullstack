@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { Trip } from '../models/trip';
 import { User } from '../models/user';
@@ -20,18 +21,24 @@ export class TripDataService {
   private apiBaseUrl = 'http://localhost:3000/api';
   private tripUrl = `${this.apiBaseUrl}/trips`;
 
-  private httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  };
+  private getHttpOptions(): { headers: HttpHeaders } {
+    const token = this.storage.getItem('travlr-token');
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `Bearer ${token}`);
+    
+    console.log('Full headers:', headers.keys().map(key => `${key}: ${headers.get(key)}`));
+    return { headers };
+  }
 
   getTrips(): Observable<Trip[]> {
     return this.http.get<Trip[]>(this.tripUrl);
   }
 
   addTrip(formData: Trip): Observable<Trip> {
-    return this.http.post<Trip>(this.tripUrl, formData, this.httpOptions);
+    const options = this.getHttpOptions();
+    console.log('Making request with options:', options);
+    return this.http.post<Trip>(this.tripUrl, formData, options);
   }
 
   getTrip(tripCode: string): Observable<Trip> {
@@ -39,7 +46,10 @@ export class TripDataService {
   }
 
   updateTrip(formData: Trip): Observable<Trip> {
-    return this.http.put<Trip>(`${this.tripUrl}/${formData.code}`, formData, this.httpOptions);
+    console.log('Updating trip with data:', formData);
+    const options = this.getHttpOptions();
+    console.log('Using headers:', options.headers.keys());
+    return this.http.put<Trip>(`${this.tripUrl}/${formData.code}`, formData, options);
   }
 
   public login(user: User): Promise<Authresponse> {
@@ -53,11 +63,12 @@ export class TripDataService {
   private makeAuthApiCall(urlPath: string, user: User): 
   Promise<Authresponse> {
     const url: string = `${this.apiBaseUrl}/${urlPath}`;
-    return this.http
-      .post(url, user)
-      .toPromise()
-      .then(response => response as Authresponse)
-      .catch(this.handleError);
+    return firstValueFrom(
+      this.http.post<Authresponse>(url, user)
+    ).catch((error) => {
+      console.error('Error occurred during authentication API call:', error);
+      throw error;
+    });
   }
 
   private handleError(error: any): Promise<any> {

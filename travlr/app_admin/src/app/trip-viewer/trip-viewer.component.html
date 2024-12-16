@@ -1,0 +1,52 @@
+<!-- trip-viewer.component.html -->
+<div class="trip-viewer">
+    <button class="back-button" (click)="goBack()">
+        ← Back to Home
+    </button>
+ 
+    <div *ngIf="loading" class="loading">
+      Loading trip details...
+    </div>
+  
+    <div *ngIf="error" class="error">
+      {{ error }}
+    </div>
+  
+    <div *ngIf="trip" class="trip-details">
+      <div class="trip-header">
+        <h1>{{ trip.name }}</h1>
+        <div class="trip-code">Trip Code: {{ trip.code }}</div>
+      </div>
+  
+      <div class="trip-image">
+        <img [src]="'/assets/images/' + trip.image" [alt]="trip.name">
+      </div>
+  
+      <div class="trip-info">
+        <div class="info-item">
+          <span class="label">Resort:</span>
+          <span class="value">{{ trip.resort }}</span>
+        </div>
+  
+        <div class="info-item">
+          <span class="label">Length:</span>
+          <span class="value">{{ trip.length }}</span>
+        </div>
+  
+        <div class="info-item">
+          <span class="label">Start Date:</span>
+          <span class="value">{{ trip.start | date }}</span>
+        </div>
+  
+        <div class="info-item">
+          <span class="label">Price Per Person:</span>
+          <span class="value">{{ trip.perPerson | currency }}</span>
+        </div>
+  
+        <div class="description">
+          <h2>Description</h2>
+          <p>{{ trip.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>

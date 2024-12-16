@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -10,10 +11,11 @@ import { CommonModule } from '@angular/common';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
-
 export class NavbarComponent implements OnInit {
-
-  constructor(private authenticationService: AuthenticationService) {}
+  constructor(
+    private authenticationService: AuthenticationService,
+    private router: Router
+  ) {}
 
   ngOnInit() {}
 
@@ -22,7 +24,7 @@ export class NavbarComponent implements OnInit {
   }
 
   public onLogout(): void {
-    return this.authenticationService.logout();
+    this.authenticationService.logout();
+    this.router.navigate(['/']); // Redirect to home after logout
   }
-
 }

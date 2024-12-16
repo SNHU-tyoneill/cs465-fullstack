@@ -1,0 +1,45 @@
+<div class="container">
+    <!-- Page Title -->
+    <h2 class="page-title">Editable List of Trips</h2>
+  
+    <!-- Tabs and Actions -->
+    <div class="trip-nav-bar">
+      <ul class="tabs">
+        <li><a href="#">Beaches (5)</a></li>
+        <li><a href="#">Cruises (4)</a></li>
+        <li><a href="#">Mountains (6)</a></li>
+      </ul>
+      <input type="text" placeholder="Search travel..." class="search-bar" />
+      <button class="add-trip-btn" (click)="addTrip()">Add a Trip</button>
+    </div>
+  
+    <!-- Trip Table -->
+    <div class="trip-table">
+      <div class="table-header">
+        <div>ID</div>
+        <div>Name</div>
+        <div>Length</div>
+        <div>Start</div>
+        <div>Resort</div>
+        <div>Per Person</div>
+        <div>Actions</div>
+      </div>
+  
+      <!-- Dynamic Rows from Database -->
+      <div class="table-row" *ngFor="let trip of trips">
+        <div>{{ trip.code }}</div>
+        <div>{{ trip.name }}</div>
+        <div>{{ trip.length }}</div>
+        <div>{{ trip.start | date:'MMM d, y' }}</div>
+        <div>{{ trip.resort }}</div>
+        <div>${{ trip.perPerson }}</div>
+        <div class="edit-btn">
+          <a (click)="editTrip(trip)">Edit</a>
+          <div class="delete-btn">
+            <button>✖</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

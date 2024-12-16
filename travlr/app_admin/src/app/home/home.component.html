@@ -1,1 +1,13 @@
-<div class="container" *ngIf="!isLoggedIn()">Please login to continue</div>
+<div class="container" *ngIf="!isLoggedIn()">
+    
+  </div>
+  <div class="grid-container">
+    <div class="grid-item"
+     *ngFor="let destination of destinations"
+     (click)="onDestinationClick(destination.code)">
+      <img [src]="destination.image" [alt]="destination.name" />
+      <h3>{{ destination.name }}</h3>
+    </div>
+  </div>
+  
+  
